@@ -24,6 +24,7 @@ def login():
         if login_user:
             if bcrypt.hashpw(password, login_user['password']) == login_user['password']:
                 session['username'] = username
+                flash('Hello, ' + session['username'] + '!')
                 return redirect(url_for('index'))
         flash('Invalid username/password combination')
     return render_template('login.html')
@@ -61,8 +62,6 @@ def register():
 def logout():
     session['username'] = None
     return redirect(url_for('index'))
-
-
 
 
 #En caso de error de ruta
