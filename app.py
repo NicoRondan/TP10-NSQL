@@ -1,12 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, Response, flash, session
-from db import existing_user, add_user
+from db import existing_user, add_user, initialize
 import bcrypt
+
 
 app = Flask(__name__)
 
 """Clave necesaria para poder utilizar flash"""
 app.secret_key = 'clave_secreta'
 
+
+@app.route('/initialize_db', methods=['GET'])
+@app.before_first_request
+def initialize_db():
+    initialize()
 
 @app.route('/')
 def index():
@@ -24,6 +30,8 @@ def login():
         if login_user:
             if bcrypt.hashpw(password, login_user['password']) == login_user['password']:
                 session['username'] = username
+                session['public_key'] = login_user['public_key']
+                session['private_key'] = login_user['private_key']
                 flash('Hello, ' + session['username'] + '!')
                 return redirect(url_for('index'))
         flash('Invalid username/password combination')
@@ -39,17 +47,19 @@ def register():
         #Verificar si existe el usuario
         user = existing_user(username)
         if user is None:
-            #Hasheamos la contraseña
+            #Hasheamos el password
             hashpass = bcrypt.hashpw(password, bcrypt.gensalt())
             #Generar usuario
             user = {
                 'name': username,
                 'password': hashpass
             }
-            #Añadir user a bbdd
-            add_user(user)
+            #Agregar user a bbdd
+            public_key, private_key = add_user(user)
             #asignar a la session
             session['username'] = username
+            session['public_key'] = public_key
+            session['private_key'] = private_key
             return redirect(url_for('index'))
         #En caso de que exista el usuario
         flash('That username already exists!')
@@ -61,6 +71,8 @@ def register():
 @app.route('/logout')
 def logout():
     session['username'] = None
+    session['public_key'] = None
+    session['private_key'] = None
     return redirect(url_for('index'))
 
 
@@ -76,4 +88,4 @@ def not_found(error=None):
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', port='5000', debug=True)
+    app.run(host='src', port='5000', debug=True)

@@ -1,0 +1,17 @@
+version: "3"
+services:
+  src:
+    build: .
+    command: sh -c 'python app.py'
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/src
+    depends_on:
+      - "db"
+  
+  db:
+    container_name: 'mongodb_usersBlockchain'
+    image: mongo
+    ports:
+      - '27017:27017'
