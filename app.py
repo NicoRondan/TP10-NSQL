@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, Response, flash, session
-from db import existing_user, add_user, initialize
+from db import existing_user, add_user, initialize, get_galactic_coins
 import bcrypt
 
 
@@ -16,8 +16,12 @@ def initialize_db():
 
 @app.route('/')
 def index():
-    #Renderizar index
-    return render_template('index.html')
+    if 'public_key' not in session or session['public_key'] == None:
+        return redirect(url_for('login'))
+    else:
+        res = get_galactic_coins(session['public_key'])
+        #Renderizar index
+        return render_template('index.html', coins=res['galactic_coins'])
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -51,7 +55,7 @@ def register():
             hashpass = bcrypt.hashpw(password, bcrypt.gensalt())
             #Generar usuario
             user = {
-                'name': username,
+                'username': username,
                 'password': hashpass
             }
             #Agregar user a bbdd

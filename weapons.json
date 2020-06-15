@@ -1,0 +1,32 @@
+[
+    {
+"data": {
+    "name": "Ion Blaster",
+    "price": 8
+}
+},
+{
+"data": {
+    "name": "Sniper Rifle",
+    "price": 5
+}
+},
+{
+"data": {
+    "name": "Nuclear Weapon",
+    "price": 10
+}
+},
+{
+"data": {
+    "name": "Electrostaff",
+    "price": 6
+}
+},
+{
+"data": {
+    "name": "Ray Gun",
+    "price": 3
+}
+}
+]
