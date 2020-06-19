@@ -27,6 +27,15 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             {% if session['username'] %}
+                {% if session['username'] == 'Darth Vader' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-weapon">Add a Weapon</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user-weapons">Your Weapons</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Log Out</a>
                 </li>

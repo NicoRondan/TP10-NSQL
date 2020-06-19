@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="row justify-content-md-center pt-4">
+        <div class="col-md-12">
+            <h1>Your Weapons</h1>
+        </div>
+        <div class ="col-md-12 form-inline">
+            {% for weapon in weapons %}
+                <div class="card rounded border border-light" style="width: 230px; height: 200px; padding-right: 0.5rem; padding-top: 0.5rem;">
+                    <div class="card-body d-flex flex-column" style="background: #141E30;background: -webkit-linear-gradient(to right, #243B55, #141E30); background: linear-gradient(to right, #243B55, #141E30);">
+                        <h5 class="card-title" style="color: white;">{{weapon['data']['name']}}</h5>
+                            <p class="card-text" style="color: white;">Price: ${{weapon['data']['price']}}</p>
+                            <p class="card-text" style="color: white;">Amount: {{weapon['amount']}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

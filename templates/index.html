@@ -1,4 +1,63 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Coins : {{coins}}</h1>
+{% if isAdmin %}
+    <div class="row pt-4">
+        <div class="col-md-5">
+            <div class="alert alert-warning" role="alert">
+                <h1>Galactic Coins :{{coins}}</h1>
+            </div>
+            <form action="/transfer-coins" method="POST">
+                <div class="form-group ">
+                    <label for="users">Transfer To</label>
+                    <select name="users" class="form-control" id="users">
+                        <option selected="true" disabled="disabled">Select an User</option>
+                        {% for user in users %}
+                            <option value="{{user['username']}}">{{user['username']}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group ">  
+                    <label for="amount">Amount </label> 
+                    <input class="form-control" type="number" min="0" max="{{coins}}"value="0" name="amount" id="amount">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4">
+                    Transfer Coins
+                </button>
+            </form>
+        </div>
+        <div class ="col-md-7 form-inline">
+            {% for weapon in weapons %}
+                <div class="card rounded border border-light" style="width: 230px; height: 200px; padding-right: 0.5rem; padding-top: 0.5rem;">
+                    <div class="card-body d-flex flex-column" style="background: #141E30;background: -webkit-linear-gradient(to right, #243B55, #141E30); background: linear-gradient(to right, #243B55, #141E30);">
+                        <h5 class="card-title" style="color: white;">{{weapon['data']['name']}}</h5>
+                            <p class="card-text" style="color: white;">Price: ${{weapon['data']['price']}}</p>
+                            <p class="card-text" style="color: white;">Amount: {{weapon['amount']}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div class="row pt-4">
+        <div class="col-md-12">
+            <h1>Weapons For Sale</h1>
+            <div class="alert alert-warning" role="alert">
+                <h3>Available Galactic Coins: {{coins}}</h3>
+              </div>
+        </div>
+        <div class ="col-md-12 form-inline">
+            {% for weapon in weapons %}
+                <div class="card rounded border border-light" style="width: 230px; height: 230px; padding-right: 0.5rem; padding-top: 0.5rem;">
+                    <div class="card-body d-flex flex-column" style="background: #141E30;background: -webkit-linear-gradient(to right, #243B55, #141E30); background: linear-gradient(to right, #243B55, #141E30);">
+                        <h5 class="card-title" style="color: white;">{{weapon['data']['name']}}</h5>
+                            <p class="card-text" style="color: white;">Price: ${{weapon['data']['price']}}</p>
+                            <p class="card-text" style="color: white;">Amount: {{weapon['amount']}}</p>
+                        <a href="/buy-weapon/{{weapon['id']}}/{{coins}}/{{weapon['data']['price']}}" class="btn btn-primary mt-auto">Buy</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
 {%endblock%}
